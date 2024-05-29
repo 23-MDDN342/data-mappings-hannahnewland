@@ -4,7 +4,7 @@
  */  
 
 // remove this or set to false to enable full program (load will be slower)
-var DEBUG_MODE = false;
+var DEBUG_MODE = true;
 
 // this can be used to set the number of sliders to show
 var NUM_SLIDERS = 3;
@@ -30,10 +30,12 @@ function segment_average(segment) {
 
 // This where you define your own face object
 function Face() {
+
+  
   // these are state variables for a face
   // (your variables should be different!)
   this.detailColour = [204, 136, 17];
-  this.mainColour = [51, 119, 153];
+  this.mainColour = [217, 2, 2];
   this.num_eyes = 2;    // can be either 1 (cyclops) or 2 (two eyes)
   this.eye_shift = -1;   // range is -10 to 10
   this.mouth_size = 1;  // range is 0.5 to 8
@@ -42,6 +44,14 @@ function Face() {
   this.lipColour = [136, 68, 68]
   this.eyebrowColour = [119, 85, 17]
 
+  this.appleColour = [217,2,2];
+
+  let eyeSize = 4;
+  this.PupilSize = int(eyeSize/1.5);
+  let centerX = 0;
+  this.Iy = -2;
+  this.DistanceBetweenEyes = 5
+
   /*
    * Draw the face with position lists that include:
    *    chin, right_eye, left_eye, right_eyebrow, left_eyebrow
@@ -49,11 +59,16 @@ function Face() {
    */  
   this.draw = function(positions) {
     console.log()
+
+
     // head
     ellipseMode(CENTER);
-    stroke(stroke_color);
-    fill(this.mainColour);
-    ellipse(segment_average(positions.chin)[0], 0, 3, 4);
+    ///stroke(stroke_color);
+    noStroke();
+    fill(this.appleColour);
+    //ellipse(segment_average(positions.chin)[0], 0, 3, 4);
+    ellipse(centerX-0.5, 0, 2,3);
+  ellipse(centerX+0.5, 0, 2,3);
     noStroke();
 
 
