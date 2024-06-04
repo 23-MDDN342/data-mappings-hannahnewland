@@ -7,7 +7,7 @@
 var DEBUG_MODE = true;
 
 // this can be used to set the number of sliders to show
-var NUM_SLIDERS = 4;
+var NUM_SLIDERS = 6;
 
 // other variables can be in here too
 // here's some examples for colors used
@@ -39,9 +39,15 @@ function Face() {
   this.eyebrowColour = [119, 85, 17]
   this.stemColour = [119, 85, 17]
 
-  this.appleColour = [217,2,2];
+  let appleColourRed1 = [217,2,2]; // medium red
+  let appleColourRed3 = [214, 27, 60] // light/slightly pink red
+  let appleColourGreen1 = [20, 156, 2] // medium green
+  let appleColourGreen2 = [113, 149, 72] //dark green
+  this.appleColour = [appleColourRed1, appleColourRed3,appleColourGreen1,appleColourGreen2];
   this.TopLipColour = [143,1,1];
   this.BottomLipColour = [252,3,32];
+  this.appleColourSelector = 3;
+  this.nose_yesno = 0;
 
   this.eyeSize = 0.5;
   let centerX = 0;
@@ -64,9 +70,26 @@ function Face() {
     // head
     ellipseMode(CENTER);
     noStroke();
-    fill(this.appleColour);
+    if(this.appleColourSelector <= 0){
+    fill(this.appleColour[0]);
     ellipse(centerX-0.5, 0, 2,3);
-  ellipse(centerX+0.5, 0, 2,3);
+    ellipse(centerX+0.5, 0, 2,3);
+
+    } else if (this.appleColourSelector <= 1){
+      fill(this.appleColour[1]);
+      ellipse(centerX-0.5, 0, 2,3);
+      ellipse(centerX+0.5, 0, 2,3);
+      } else if (this.appleColourSelector <= 2){
+        fill(this.appleColour[2]);
+        ellipse(centerX-0.5, 0, 2,3);
+        ellipse(centerX+0.5, 0, 2,3);
+        } else if (this.appleColourSelector <= 3){
+          fill(this.appleColour[3]);
+          ellipse(centerX-0.5, 0, 2,3);
+          ellipse(centerX+0.5, 0, 2,3);
+          }
+   
+          console.log(this.appleColourSelector);
 
   //stem
   fill(this.stemColour);
@@ -193,6 +216,8 @@ function Face() {
 
     strokeWeight(0.03);
 
+
+    if(this.nose_yesno ==0){
     this.NoseBridge3 = positions.nose_bridge[3];
     this.NoseTipA = segment_average(positions.nose_tip);
 
@@ -205,7 +230,7 @@ function Face() {
     fill(this.TopLipColour);
     ellipse(this.NoseTipA[0], this.NoseBridge3[1], 0.6);
 
-
+    }
     
 
     let left_eye_pos = segment_average(positions.left_eye);
@@ -280,7 +305,9 @@ function Face() {
     this.eye_value = int(map(settings[0], 0, 100, 1, 2));
     this.mouth_type = map(settings[1], 0, 100, 1, 2);
     this.eyeSize = map(settings[2], 0, 100, 0.3, 0.7);
-    this.tilt_value = map(settings[3], 0, 100, -90, 90);
+    this.tilt_value = map(settings[3], 0, 100, -180, 0);
+    this.appleColourSelector = map(settings[4], 0 ,100, 0, 3);
+    this.nose_yesno = map(settings[5],0,100,0,1);
   }
 
   /* get internal properties as list of numbers 0-100 */
@@ -289,7 +316,9 @@ function Face() {
     settings[0] = map(this.eye_value, 1, 2, 0, 100);
     settings[1] = map(this.mouth_type, 1, 2, 0, 100);
     settings[2] = map(this.eyeSize, 0.3, 0.7, 0, 100);
-    settings[3] = map(this.tilt_value, -90,90,0,100);
+    settings[3] = map(this.tilt_value, -180,0,0,100);
+    settings[4] = map(this.appleColourSelector, 0, 3, 0, 100);
+    settings[5] = map(this.nose_yesno,0,1,0,100);
     return settings;
   }
 }

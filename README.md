@@ -5,3 +5,9 @@
 REPLACE ALL TEXT IN THIS FILE
 
 This README should be used to document your design.
+
+Number of Eyes: 1 for Male, 2 for Female
+Apple Colour: Hair Colour, dark red for black, light red for brown, dark green for blonde, light green for red
+Tilt Value: upside down for short hair, upright for long hair
+Eye Size: small, no ears visible, medium, 1 ear visible, large, both ears visible
+Nose: Happy, no nose, not happy, yes nose
