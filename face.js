@@ -7,7 +7,7 @@
 var DEBUG_MODE = true;
 
 // this can be used to set the number of sliders to show
-var NUM_SLIDERS = 3;
+var NUM_SLIDERS = 4;
 
 // other variables can be in here too
 // here's some examples for colors used
@@ -31,36 +31,26 @@ function segment_average(segment) {
 // This where you define your own face object
 function Face() {
 
-  
   // these are state variables for a face
   // (your variables should be different!)
-  this.detailColour = [204, 136, 17];
-  this.mainColour = [217, 2, 2];
-  this.num_eyes = 2;    // can be either 1 (cyclops) or 2 (two eyes)
-  this.eye_shift = -1;   // range is -10 to 10
-  this.mouth_size = 1;  // range is 0.5 to 8
-
+ 
   this.chinColour = [153, 153, 51]
   this.lipColour = [136, 68, 68]
   this.eyebrowColour = [119, 85, 17]
+  this.stemColour = [119, 85, 17]
 
   this.appleColour = [217,2,2];
   this.TopLipColour = [143,1,1];
   this.BottomLipColour = [252,3,32];
-  this.MouthType = 2;
 
   this.eyeSize = 0.5;
-  this.PupilSize = int(this.eyeSize/1.5);
   let centerX = 0;
-  this.DistanceBetweenEyes = 5
 
-  this.tilt_value = 90;
+
+  this.tilt_value = 1;
   this.eye_value = 2;
-  // this.mouth_type =
-  //this.eye_type = 1;
-  // this.eyebrows_yesno =
-  // this.eyebrow_height =
-  // this.eyebrow_length = 
+   this.mouth_type = 2;
+
 
   /*
    * Draw the face with position lists that include:
@@ -69,132 +59,160 @@ function Face() {
    */  
   this.draw = function(positions) {
 
+    rotate(this.tilt_value);
+
     // head
     ellipseMode(CENTER);
-    ///stroke(stroke_color);
     noStroke();
     fill(this.appleColour);
-    //ellipse(segment_average(positions.chin)[0], 0, 3, 4);
     ellipse(centerX-0.5, 0, 2,3);
   ellipse(centerX+0.5, 0, 2,3);
+
+  //stem
+  fill(this.stemColour);
+  beginShape();
+  vertex(centerX, -1.2);
+  vertex(centerX+0.2,-2);
+  vertex(centerX-0.2,-2);
+  endShape(CLOSE);
+
     noStroke();
 
 
     // mouth
-    this.TopLipPoint1 = positions.top_lip[0]; //point 48
-    this.TopLipPoint2 = positions.top_lip[2]; //point 50
-    this.TopLipPoint3 = positions.top_lip[3]; //point 51
-    this.TopLipPoint4 = positions.top_lip[4]; //point 52
-    this.TopLipPoint5 = positions.top_lip[6]; //point 54
+    this.LipPoint48 = positions.top_lip[0]; //point 48
+    this.LipPoint50 = positions.top_lip[2]; //point 50
+    this.LipPoint51 = positions.top_lip[3]; //point 51
+    this.LipPoint52 = positions.top_lip[4]; //point 52
+    this.LipPoint54 = positions.top_lip[6]; //point 54
 
-    this.BottomLipPoint1 = positions.bottom_lip[2] //point 56
-    this.BottomLipPoint2 = positions.bottom_lip[4] //point 58
+    this.LipPoint56 = positions.bottom_lip[2] //point 56
+    this.LipPoint58 = positions.bottom_lip[4] //point 58
 
-    if(this.MouthType ==1){ //mouth shut
+    this.LipPoint61 = positions.top_lip[10];//point 61
+    this.LipPoint62 = positions.top_lip[9]; //point 62
+    this.LipPoint63 = positions.top_lip[8]; //point 63
+    this.LipPoint67 = positions.bottom_lip[8] //point 67
+    this.LipPoint66 = positions.bottom_lip[9] // point 66
+    this.LipPoint65 = positions.bottom_lip[10] //point 65
+
+
+    if(this.mouth_type ==1){ //mouth shut
 
     fill(this.BottomLipColour);
 
+    // bottom lip
+
    beginShape();
-   vertex(this.TopLipPoint1[0],this.TopLipPoint1[1]);
-   vertex(this.TopLipPoint5[0],this.TopLipPoint5[1]);
-   vertex(this.BottomLipPoint1[0], this.BottomLipPoint1[1]);
-   vertex(this.BottomLipPoint2[0],this.BottomLipPoint2[1]);
+   vertex(this.LipPoint48[0],this.LipPoint48[1]);
+   vertex(this.LipPoint61[0],this.LipPoint61[1]);
+   vertex(this.LipPoint62[0],this.LipPoint62[1]);
+   vertex(this.LipPoint63[0],this.LipPoint63[1]);
+   vertex(this.LipPoint54[0],this.LipPoint54[1]);
+   vertex(this.LipPoint56[0], this.LipPoint56[1]);
+   vertex(this.LipPoint58[0],this.LipPoint58[1]);
    endShape(CLOSE);
    
     fill(this.TopLipColour);
-    //ellipse(this.BottomLipPoint2[0],this.BottomLipPoint2[1],0.5);
+
+    //top lip
    
     beginShape();
-   vertex(this.TopLipPoint1[0],this.TopLipPoint1[1]);
-   vertex(this.TopLipPoint2[0],this.TopLipPoint2[1]);
-   vertex(this.TopLipPoint3[0],this.TopLipPoint3[1]);
-   vertex(this.TopLipPoint4[0],this.TopLipPoint4[1]);
-   vertex(this.TopLipPoint5[0],this.TopLipPoint5[1]);
+   vertex(this.LipPoint48[0],this.LipPoint48[1]);
+   vertex(this.LipPoint50[0],this.LipPoint50[1]);
+   vertex(this.LipPoint51[0],this.LipPoint51[1]);
+   vertex(this.LipPoint52[0],this.LipPoint52[1]);
+   vertex(this.LipPoint54[0],this.LipPoint54[1]);
+   vertex(this.LipPoint63[0],this.LipPoint63[1]);
+   vertex(this.LipPoint62[0],this.LipPoint62[1]);
+   vertex(this.LipPoint61[0],this.LipPoint61[1]);
    endShape(CLOSE);
 
     } 
     else {
-
-      this.OpenMouthPoint1 = positions.top_lip[10];//point 61
-      this.OpenMouthPoint2 = positions.top_lip[9]; //point 62
-      this.OpenMouthPoint3 = positions.top_lip[8]; //point 63
-      this.OpenMouthPoint4 = positions.bottom_lip[8] //point 67
-      this.OpenMouthPoint5 = positions.bottom_lip[9] // point 66
-      this.OpenMouthPoint6 = positions.bottom_lip[10] //point 65
 
      
 
       fill(this.BottomLipColour);
 
       beginShape();
-      vertex(this.TopLipPoint1[0],this.TopLipPoint1[1]);
-      vertex(this.TopLipPoint5[0],this.TopLipPoint5[1]);
-      vertex(this.BottomLipPoint1[0], this.BottomLipPoint1[1]);
-      vertex(this.BottomLipPoint2[0],this.BottomLipPoint2[1]);
+      vertex(this.LipPoint48[0],this.LipPoint48[1]);
+      vertex(this.LipPoint61[0],this.LipPoint61[1]);
+      vertex(this.LipPoint62[0],this.LipPoint62[1]);
+      vertex(this.LipPoint63[0],this.LipPoint63[1]);
+      vertex(this.LipPoint54[0],this.LipPoint54[1]);
+      vertex(this.LipPoint56[0], this.LipPoint56[1]);
+      vertex(this.LipPoint58[0],this.LipPoint58[1]);
       endShape(CLOSE);
       
        fill(this.TopLipColour);
        //ellipse(this.BottomLipPoint2[0],this.BottomLipPoint2[1],0.5);
       
        beginShape();
-      vertex(this.TopLipPoint1[0],this.TopLipPoint1[1]);
-      vertex(this.TopLipPoint2[0],this.TopLipPoint2[1]);
-      vertex(this.TopLipPoint3[0],this.TopLipPoint3[1]);
-      vertex(this.TopLipPoint4[0],this.TopLipPoint4[1]);
-      vertex(this.TopLipPoint5[0],this.TopLipPoint5[1]);
+       vertex(this.LipPoint48[0],this.LipPoint48[1]);
+       vertex(this.LipPoint50[0],this.LipPoint50[1]);
+       vertex(this.LipPoint51[0],this.LipPoint51[1]);
+       vertex(this.LipPoint52[0],this.LipPoint52[1]);
+       vertex(this.LipPoint54[0],this.LipPoint54[1]);
+       vertex(this.LipPoint63[0],this.LipPoint63[1]);
+       vertex(this.LipPoint62[0],this.LipPoint62[1]);
+       vertex(this.LipPoint61[0],this.LipPoint61[1]);
       endShape(CLOSE);
 
 
       fill(0);
 
       beginShape();
-      vertex(this.TopLipPoint1[0],this.TopLipPoint1[1]);
-      vertex(this.OpenMouthPoint1[0],this.OpenMouthPoint1[1]);
-      vertex(this.OpenMouthPoint2[0],this.OpenMouthPoint2[1]);
-      vertex(this.OpenMouthPoint3[0],this.OpenMouthPoint3[1]);
-      vertex(this.TopLipPoint5[0],this.TopLipPoint5[1]);
-      vertex(this.OpenMouthPoint6[0], this.OpenMouthPoint6[1]);
-      vertex(this.OpenMouthPoint5[0],this.OpenMouthPoint5[1]);
-      vertex(this.OpenMouthPoint4[0],this.OpenMouthPoint4[1]);
+      vertex(this.LipPoint48[0],this.LipPoint48[1]);
+      vertex(this.LipPoint61[0],this.LipPoint61[1]);
+      vertex(this.LipPoint62[0],this.LipPoint62[1]);
+      vertex(this.LipPoint63[0],this.LipPoint63[1]);
+      vertex(this.LipPoint54[0],this.LipPoint54[1]);
+      vertex(this.LipPoint65[0], this.LipPoint65[1]);
+      vertex(this.LipPoint66[0],this.LipPoint66[1]);
+      vertex(this.LipPoint67[0],this.LipPoint67[1]);
       endShape(CLOSE);
 
      
     }
-   
 
 
     // eyebrows
     fill( this.eyebrowColour);
     stroke( this.eyebrowColour);
     strokeWeight(0.08);
-    this.draw_segment(positions.left_eyebrow);
-    this.draw_segment(positions.right_eyebrow);
+    //this.draw_segment(positions.left_eyebrow);
+    //this.draw_segment(positions.right_eyebrow);
 
-    // draw the chin segment using points
-    fill(this.chinColour);
-    stroke(this.chinColour);
-    this.draw_segment(positions.chin);
-
+   
+    // nose
     fill(100, 0, 100);
     stroke(100, 0, 100);
-    this.draw_segment(positions.nose_bridge);
-    this.draw_segment(positions.nose_tip);
+    //this.draw_segment(positions.nose_bridge);
+    //this.draw_segment(positions.nose_tip);
 
     strokeWeight(0.03);
 
-    fill(this.lipColour);
-    stroke(this.lipColour);
-    //this.draw_segment(positions.top_lip);
-    //this.draw_segment(positions.bottom_lip);
+    this.NoseBridge3 = positions.nose_bridge[3];
+    this.NoseTipA = segment_average(positions.nose_tip);
+
+
+    noStroke();
+    fill(this.BottomLipColour);
+    ellipse(this.NoseTipA[0]+0.2, this.NoseBridge3[1], 0.4);
+    ellipse(this.NoseTipA[0]-0.2, this.NoseBridge3[1], 0.4);
+
+    fill(this.TopLipColour);
+    ellipse(this.NoseTipA[0], this.NoseBridge3[1], 0.6);
+
+
+    
 
     let left_eye_pos = segment_average(positions.left_eye);
     let right_eye_pos = segment_average(positions.right_eye);
 
     // eyes
     noStroke();
-    let curEyeShift = 0.04 * this.eye_shift;
-
-
     if (this.eye_value == 2) {
       fill(255);
 
@@ -223,13 +241,13 @@ function Face() {
       let eyePosY = (left_eye_pos[1] + right_eye_pos[1]) / 2;
 
       fill(255);
-      ellipse(eyePosX, eyePosY, 1.5, this.eyeSize);
+      ellipse(eyePosX, eyePosY, this.eyeSize * 3, this.eyeSize);
       
       fill(0);
       ellipse(eyePosX,eyePosY, this.eyeSize);
 
       fill(255);
-      ellipse(eyePosX, eyePosY, this.eyeSize/2);
+      ellipse(eyePosX, eyePosY, this.eyeSize/1.5);
 
     }
    // fill(0)
@@ -259,17 +277,19 @@ function Face() {
 
   /* set internal properties based on list numbers 0-100 */
   this.setProperties = function(settings) {
-    this.num_eyes = int(map(settings[0], 0, 100, 1, 2));
-    this.eye_shift = map(settings[1], 0, 100, -2, 2);
-    this.mouth_size = map(settings[2], 0, 100, 0.5, 8);
+    this.eye_value = int(map(settings[0], 0, 100, 1, 2));
+    this.mouth_type = map(settings[1], 0, 100, 1, 2);
+    this.eyeSize = map(settings[2], 0, 100, 0.3, 0.7);
+    this.tilt_value = map(settings[3], 0, 100, -90, 90);
   }
 
   /* get internal properties as list of numbers 0-100 */
   this.getProperties = function() {
-    let settings = new Array(3);
+    let settings = new Array(4);
     settings[0] = map(this.eye_value, 1, 2, 0, 100);
-    settings[1] = map(this.eye_shift, -2, 2, 0, 100);
-    settings[2] = map(this.mouth_size, 0.5, 8, 0, 100);
+    settings[1] = map(this.mouth_type, 1, 2, 0, 100);
+    settings[2] = map(this.eyeSize, 0.3, 0.7, 0, 100);
+    settings[3] = map(this.tilt_value, -90,90,0,100);
     return settings;
   }
 }
