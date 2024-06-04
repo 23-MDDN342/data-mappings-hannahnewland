@@ -1,21 +1,11 @@
-/*
- * FaceMap class - holds all informaiton about one mapped
- * face and is able to draw itself.
- */  
+
 
 // remove this or set to false to enable full program (load will be slower)
-var DEBUG_MODE = false;
+var DEBUG_MODE = true;
 
 // this can be used to set the number of sliders to show
 var NUM_SLIDERS = 6;
 
-// other variables can be in here too
-// here's some examples for colors used
-
-
-const stroke_color = [95, 52, 8];
-
-// example of a global function
 // given a segment, this returns the average point [x, y]
 function segment_average(segment) {
   let sum_x = 0;
@@ -28,41 +18,31 @@ function segment_average(segment) {
   return [sum_x / s_len , sum_y / s_len ];
 }
 
-// This where you define your own face object
+
 function Face() {
 
   // these are state variables for a face
   // (your variables should be different!)
- 
-  this.chinColour = [153, 153, 51]
-  this.lipColour = [136, 68, 68]
-  this.eyebrowColour = [119, 85, 17]
-  this.stemColour = [119, 85, 17]
+
+
+  let stemColour = [119, 85, 17]
 
   let appleColourRed1 = [217,2,2]; // medium red
   let appleColourRed3 = [214, 27, 60] // light/slightly pink red
   let appleColourGreen1 = [20, 156, 2] // medium green
   let appleColourGreen2 = [113, 149, 72] //dark green
   this.appleColour = [appleColourRed1, appleColourRed3,appleColourGreen1,appleColourGreen2];
-  this.TopLipColour = [143,1,1];
-  this.BottomLipColour = [252,3,32];
-  this.appleColourSelector = 3;
+  this.TopLipColour = [143,1,1]; // colour of the top lip
+  this.BottomLipColour = [252,3,32]; // colour of the bottom lip 
+  this.appleColourSelector = 0;
   this.nose_yesno = 0;
-
   this.eyeSize = 0.5;
   let centerX = 0;
-
-
   this.tilt_value = 1;
   this.eye_value = 2;
-   this.mouth_type = 2;
+  this.mouth_type = 2;
 
 
-  /*
-   * Draw the face with position lists that include:
-   *    chin, right_eye, left_eye, right_eyebrow, left_eyebrow
-   *    bottom_lip, top_lip, nose_tip, nose_bridge, 
-   */  
   this.draw = function(positions) {
 
     rotate(this.tilt_value);
@@ -70,29 +50,27 @@ function Face() {
     // head
     ellipseMode(CENTER);
     noStroke();
-    if(this.appleColourSelector <= 0){
+    if(this.appleColourSelector <= 0){ // dark red
     fill(this.appleColour[0]);
     ellipse(centerX-0.5, 0, 2,3);
     ellipse(centerX+0.5, 0, 2,3);
 
-    } else if (this.appleColourSelector <= 1){
+    } else if (this.appleColourSelector <= 1){ // light red
       fill(this.appleColour[1]);
       ellipse(centerX-0.5, 0, 2,3);
       ellipse(centerX+0.5, 0, 2,3);
-      } else if (this.appleColourSelector <= 2){
+      } else if (this.appleColourSelector <= 2){ // dark green
         fill(this.appleColour[2]);
         ellipse(centerX-0.5, 0, 2,3);
         ellipse(centerX+0.5, 0, 2,3);
-        } else if (this.appleColourSelector <= 3){
+        } else if (this.appleColourSelector <= 3){ // light green 
           fill(this.appleColour[3]);
           ellipse(centerX-0.5, 0, 2,3);
           ellipse(centerX+0.5, 0, 2,3);
           }
-   
-          console.log(this.appleColourSelector);
 
   //stem
-  fill(this.stemColour);
+  fill(stemColour);
   beginShape();
   vertex(centerX, -1.2);
   vertex(centerX+0.2,-2);
@@ -198,25 +176,8 @@ function Face() {
 
      
     }
-
-
-    // eyebrows
-    fill( this.eyebrowColour);
-    stroke( this.eyebrowColour);
-    strokeWeight(0.08);
-    //this.draw_segment(positions.left_eyebrow);
-    //this.draw_segment(positions.right_eyebrow);
-
-   
     // nose
-    fill(100, 0, 100);
-    stroke(100, 0, 100);
-    //this.draw_segment(positions.nose_bridge);
-    //this.draw_segment(positions.nose_tip);
-
-    strokeWeight(0.03);
-
-
+  
     if(this.nose_yesno ==0){
     this.NoseBridge3 = positions.nose_bridge[3];
     this.NoseTipA = segment_average(positions.nose_tip);
@@ -233,10 +194,10 @@ function Face() {
     }
     
 
+    //eyes
     let left_eye_pos = segment_average(positions.left_eye);
     let right_eye_pos = segment_average(positions.right_eye);
 
-    // eyes
     noStroke();
     if (this.eye_value == 2) {
       fill(255);
@@ -275,30 +236,8 @@ function Face() {
       ellipse(eyePosX, eyePosY, this.eyeSize/1.5);
 
     }
-   // fill(0)
-   //ellipse(0,0, 0.5,0.5) center point
-   //rect(-2,-2,4.5,4) sizing debug 
-  }
 
-  // example of a function *inside* the face object.
-  // this draws a segment, and do_loop will connect the ends if true
-  this.draw_segment = function(segment, do_loop) {
-    for(let i=0; i<segment.length; i++) {
-        let px = segment[i][0];
-        let py = segment[i][1];
-        ellipse(px, py, 0.1);
-        if(i < segment.length - 1) {
-          let nx = segment[i+1][0];
-          let ny = segment[i+1][1];
-          line(px, py, nx, ny);
-        }
-        else if(do_loop) {
-          let nx = segment[0][0];
-          let ny = segment[0][1];
-          line(px, py, nx, ny);
-        }
-    }
-  };
+  }
 
   /* set internal properties based on list numbers 0-100 */
   this.setProperties = function(settings) {
